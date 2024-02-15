@@ -8,8 +8,8 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/schema.ts",
-    "migrate": "ts-node src/db/migrate",
+		"generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/schema.ts",
+		"migrate": "ts-node src/db/migrate",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
@@ -38,6 +38,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@vercel/postgres": "^0.7.2",
 		"dotenv": "^16.4.3",
 		"drizzle-orm": "^0.29.3",
 		"pg": "^8.11.3"
