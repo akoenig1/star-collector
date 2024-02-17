@@ -4,6 +4,8 @@ export const regions = pgTable("regions", {
   region_id: serial("region_id").primaryKey(),
   name: text("name"),
 });
+export type Region = typeof regions.$inferSelect;
+export type NewRegion = typeof regions.$inferInsert;
 
 export const cities = pgTable("cities", {
   city_id: serial("city_id").primaryKey(),
