@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/db/db';
 import { regions } from '$lib/db/schema';
-import { NewRegion, Region } from '$lib/db/types';
+import { Region, NewRegion } from '$lib/db/types';
 
 
 // GET /api/regions
@@ -54,9 +54,9 @@ export async function DELETE({ url }) {
     const idToDelete = parseInt(params.get('id') as string);
 
     console.log(`Deleting region with id: ${idToDelete}`);
-    const deletedUserId = await db.delete(regions).where(eq(regions.region_id, idToDelete)).returning({deletedId: regions.region_id});
+    const deletedRegionId = await db.delete(regions).where(eq(regions.region_id, idToDelete)).returning({deletedId: regions.region_id});
     
-    return new Response(JSON.stringify(deletedUserId), { status: 201 });
+    return new Response(JSON.stringify(deletedRegionId), { status: 201 });
   } catch (error) {
     return new Response('Internal Server Error', { status: 500 });
   }
