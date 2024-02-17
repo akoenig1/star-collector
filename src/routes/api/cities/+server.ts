@@ -69,7 +69,9 @@ export async function DELETE({ url }) {
     const idToDelete = parseInt(params.get('id') as string);
 
     console.log(`Deleting city with id: ${idToDelete}`);
-    const deletedCityId = await db.delete(cities).where(eq(cities.city_id, idToDelete)).returning({deletedId: cities.city_id});
+    const deletedCityId = await db.delete(cities)
+      .where(eq(cities.city_id, idToDelete))
+      .returning({deletedId: cities.city_id});
     
     return new Response(JSON.stringify(deletedCityId), { status: 201 });
   } catch (error) {

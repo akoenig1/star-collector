@@ -57,7 +57,9 @@ export async function DELETE({ url }) {
     const idToDelete = parseInt(params.get('id') as string);
 
     console.log(`Deleting region with id: ${idToDelete}`);
-    const deletedRegionId = await db.delete(regions).where(eq(regions.region_id, idToDelete)).returning({deletedId: regions.region_id});
+    const deletedRegionId = await db.delete(regions)
+      .where(eq(regions.region_id, idToDelete))
+      .returning({deletedId: regions.region_id});
     
     return new Response(JSON.stringify(deletedRegionId), { status: 201 });
   } catch (error) {
