@@ -5,9 +5,18 @@ import { Region, NewRegion } from '$lib/db/types';
 
 
 // GET /api/regions
-export async function GET() {
+// GET /api/regions/:id
+export async function GET({ url }) {
   try {
-    const result: Region[] = await db.select().from(regions);
+    const params = url.searchParams;
+    const idString = params.get('id') as string | null;
+    const id = idString ? parseInt(idString) : null;
+
+    const result: Region[] = id
+      ? await db.select()
+        .from(regions)
+        .where(eq(regions.region_id, id))
+      : await db.select().from(regions);
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {

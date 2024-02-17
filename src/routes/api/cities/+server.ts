@@ -5,9 +5,18 @@ import { City, NewCity } from '$lib/db/types';
 
 
 // GET /api/cities
-export async function GET() {
+// GET /api/cities/:id
+export async function GET({ url }) {
   try {
-    const result: City[] = await db.select().from(cities);
+    const params = url.searchParams;
+    const idString = params.get('id') as string | null;
+    const id = idString ? parseInt(idString) : null;
+
+    const result: City[] = id
+      ? await db.select()
+        .from(cities)
+        .where(eq(cities.city_id, id))
+      : await db.select().from(cities);
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {

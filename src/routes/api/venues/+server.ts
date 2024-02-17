@@ -5,9 +5,18 @@ import { Venue, NewVenue } from '$lib/db/types';
 
 
 // GET /api/venues
-export async function GET() {
+// GET /api/venues/:id
+export async function GET({ url }) {
   try {
-    const result: Venue[] = await db.select().from(venues);
+    const params = url.searchParams;
+    const idString = params.get('id') as string | null;
+    const id = idString ? parseInt(idString) : null;
+
+    const result: Venue[] = id 
+      ? await db.select()
+        .from(venues)
+        .where(eq(venues.venue_id, id))
+      : await db.select().from(venues);
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
