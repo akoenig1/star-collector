@@ -39,7 +39,10 @@ export async function PUT({ request, url }) {
     const data = await request.formData();
     const updatedRegionName = data.get('name') as string;
 
-    const updatedRegion = await db.update(regions).set({ name: updatedRegionName }).where(eq(regions.region_id, idToUpdate)).returning();
+    const updatedRegion = await db.update(regions)
+      .set({ name: updatedRegionName })
+      .where(eq(regions.region_id, idToUpdate))
+      .returning();
     
     return new Response(JSON.stringify(updatedRegion), { status: 201 });
   } catch (error) {
