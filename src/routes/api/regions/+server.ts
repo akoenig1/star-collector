@@ -1,6 +1,8 @@
-import { db } from '$lib/db/db';
-import { regions, Region, NewRegion } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { db } from '$lib/db/db';
+import { regions } from '$lib/db/schema';
+import { NewRegion, Region } from '$lib/db/types';
+
 
 // GET /api/regions
 export async function GET() {
