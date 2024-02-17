@@ -31,6 +31,7 @@ export async function POST({ request }) {
     const cityName = data.get('name') as string;
     const regionId = data.get('region_id') as string;
     const currentYear = data.get('current_year') as string;
+    
     const city: NewCity = { 
       name: cityName,
       region_id: parseInt(regionId),
