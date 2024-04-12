@@ -15,6 +15,13 @@
       "when": 1712895862796,
       "tag": "0001_omniscient_invaders",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712943514092,
+      "tag": "0002_parched_post",
+      "breakpoints": true
     }
   ]
 }

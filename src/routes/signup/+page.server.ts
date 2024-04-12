@@ -2,34 +2,30 @@ import { lucia } from "$lib/server/auth";
 import { fail, redirect } from "@sveltejs/kit";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from "zod";
 
 import type { Actions } from "./$types";
 import { db } from "$lib/db/db";
 import { users } from "$lib/db/schema";
 import { NewUser } from "$lib/db/types";
 
+const signupFormSchema = z.object({
+  email: z.string().email().min(3).max(320),
+  password: z.string().min(6).max(255)
+});
+
 export const actions: Actions = {
 	default: async (event) => {
-		const formData = await event.request.formData();
-		const email = formData.get("email");
-		const password = formData.get("password");
-		// email must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
-		// keep in mind some database (e.g. mysql) are case insensitive
-		if (
-			typeof email !== "string" ||
-			email.length < 3 ||
-			email.length > 31 ||
-			!/^[a-z0-9_-]+$/.test(email)
-		) {
-			return fail(400, {
-				message: "Invalid email"
-			});
-		}
-		if (typeof password !== "string" || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: "Invalid password"
-			});
-		}
+    const { request } = event;
+		const form = await superValidate(request, zod(signupFormSchema));
+
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
+    const { email, password } = form.data;
 
 		const userId = generateId(15);
 		const hashedPassword = await new Argon2id().hash(password);
@@ -53,3 +49,9 @@ export const actions: Actions = {
 		redirect(302, "/");
 	}
 };
+
+export const load = (async () => {
+  const form = await superValidate(zod(signupFormSchema));
+
+  return { form };
+});
