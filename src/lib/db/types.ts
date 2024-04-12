@@ -1,9 +1,14 @@
 import {
+  users,
   cities,
   regions,
   starAwards,
   venues,
 } from "./schema";
+
+// users
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
 // regions
 export type Region = typeof regions.$inferSelect;
