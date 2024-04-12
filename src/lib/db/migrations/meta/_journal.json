@@ -22,6 +22,13 @@
       "when": 1712943514092,
       "tag": "0002_parched_post",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712952813722,
+      "tag": "0003_huge_big_bertha",
+      "breakpoints": true
     }
   ]
 }
