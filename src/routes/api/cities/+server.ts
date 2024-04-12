@@ -31,11 +31,13 @@ export async function POST({ request }) {
     const cityName = data.get('name') as string;
     const regionId = data.get('region_id') as string;
     const currentYear = data.get('current_year') as string;
+    const slug = cityName.toLowerCase().replace(/\s/g, '-');
     
     const city: NewCity = { 
       name: cityName,
       region_id: parseInt(regionId),
       current_year: parseInt(currentYear),
+      slug: slug,
     };
 
     const result = await db.insert(cities).values(city).returning();
@@ -56,12 +58,14 @@ export async function PUT({ request, url }) {
     const updatedCityName = data.get('name') as string | null;
     const updatedRegionId = data.get('region_id') as string | null;
     const updatedCurrentYear = data.get('current_year') as string | null;
+    const updatedCitySlug = data.get('slug') as string | null;
 
     const updatedCity = await db.update(cities)
       .set({ 
         name: updatedCityName ? updatedCityName : undefined,
         region_id: updatedRegionId ? parseInt(updatedRegionId) : undefined,
         current_year: updatedCurrentYear ? parseInt(updatedCurrentYear) : undefined,
+        slug: updatedCitySlug ? updatedCitySlug : undefined,
       })
       .where(eq(cities.city_id, idToUpdate))
       .returning();
