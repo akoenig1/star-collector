@@ -27,8 +27,9 @@ export async function GET({ url }) {
 export async function POST({ request }) {
   try {
     const data = await request.formData();
-    const regionName = data.get('name') as string;
-    const region: NewRegion = { name: regionName };
+    const name = data.get('name') as string;
+    const slug = name.toLowerCase().replace(/\s/g, '-');
+    const region: NewRegion = { name, slug };
 
     const result = await db.insert(regions).values(region).returning();
 
@@ -46,9 +47,14 @@ export async function PUT({ request, url }) {
 
     const data = await request.formData();
     const updatedRegionName = data.get('name') as string;
+    const updatedSlugName = data.get('slug') as string;
 
     const updatedRegion = await db.update(regions)
-      .set({ name: updatedRegionName })
+      .set({ 
+        name: updatedRegionName ? updatedRegionName : undefined,
+        slug: updatedSlugName ? updatedSlugName : undefined,
+      })
+      // TODO: test if this is an issue
       .where(eq(regions.slug, slugToUpdate))
       .returning();
     
