@@ -16,7 +16,7 @@
   <ul>
     {#each regions as region}
       <li>
-        <a href="/regions/{region.name}">{region.name}</a>
+        <a href="/admin/regions/{region.slug}">{region.name}</a>
       </li>
     {/each}
   </ul>
