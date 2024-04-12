@@ -20,7 +20,6 @@ export const actions: Actions = {
 	default: async (event) => {
 		const { request } = event;
 		const form = await superValidate(request, zod(loginFormSchema));
-    console.log(form);
 
     if (!form.valid) {
       return fail(400, { form });
