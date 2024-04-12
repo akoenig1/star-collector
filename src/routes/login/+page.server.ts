@@ -1,6 +1,9 @@
 import { lucia } from "$lib/server/auth";
 import { fail, redirect } from "@sveltejs/kit";
 import { Argon2id } from "oslo/password";
+import { setError, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from "zod";
 
 import type { Actions } from "./$types";
 import { db } from "$lib/db/db";
@@ -8,27 +11,22 @@ import { users } from "$lib/db/schema";
 import { eq } from "drizzle-orm";
 import { User } from "$lib/db/types";
 
+const loginFormSchema = z.object({
+  email: z.string().email().min(3).max(320),
+  password: z.string().min(6).max(255)
+});
+
 export const actions: Actions = {
 	default: async (event) => {
-		const formData = await event.request.formData();
-		const email = formData.get("email");
-		const password = formData.get("password");
+		const { request } = event;
+		const form = await superValidate(request, zod(loginFormSchema));
+    console.log(form);
 
-		if (
-			typeof email !== "string" ||
-			email.length < 3 ||
-			email.length > 320 ||
-			!/^[a-z0-9_-]+$/.test(email)
-		) {
-			return fail(400, {
-				message: "Invalid email"
-			});
-		}
-		if (typeof password !== "string" || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: "Invalid password"
-			});
-		}
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
+    const { email, password } = form.data;
 
 		const existingUser: User = (await db.select()
       .from(users)
@@ -43,16 +41,12 @@ export const actions: Actions = {
 			// Since protecting against this is non-trivial,
 			// it is crucial your implementation is protected against brute-force attacks with login throttling etc.
 			// If emails are public, you may outright tell the user that the email is invalid.
-			return fail(400, {
-				message: "Incorrect email or password"
-			});
+			return setError(form, 'email', 'Email does not exist.');
 		}
 
 		const validPassword = await new Argon2id().verify(existingUser.hashedPassword, password);
 		if (!validPassword) {
-			return fail(400, {
-				message: "Incorrect email or password"
-			});
+			return setError(form, 'password', 'Invalid password.');
 		}
 
 		const session = await lucia.createSession(existingUser.id, {});
@@ -65,3 +59,9 @@ export const actions: Actions = {
 		redirect(302, "/");
 	}
 };
+
+export const load = (async () => {
+  const form = await superValidate(zod(loginFormSchema));
+
+  return { form };
+});

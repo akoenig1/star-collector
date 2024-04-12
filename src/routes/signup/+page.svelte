@@ -34,7 +34,7 @@
   {#if $errors.password}<span class="invalid">{$errors.password}</span>{/if}
   <br />
 
-  <button>Continue</button>
+  <button>Sign Up</button>
 </form>
 
 <style>
