@@ -30,9 +30,11 @@ export async function POST({ request }) {
     const data = await request.formData();
     const venueName = data.get('name') as string;
     const cityId = data.get('city_id') as string;
+    const slug = venueName.toLowerCase().replace(/\s/g, '-');
     const venue: NewVenue = { 
       name: venueName,
       city_id: parseInt(cityId),
+      slug: slug,
     };
 
     const result = await db.insert(venues).values(venue).returning();
@@ -52,14 +54,16 @@ export async function PUT({ request, url }) {
     const data = await request.formData();
     const updatedVenueName = data.get('name') as string | null;
     const updatedCityId = data.get('city_id') as string | null;
+    const updatedSlug = data.get('slug') as string | null;
 
     const updatedVenue = await db.update(venues)
       .set({
         // TODO: Are these ternaries safe? Testing seems to indicate that they are.
         name: updatedVenueName ? updatedVenueName : undefined,
         city_id: updatedCityId ? parseInt(updatedCityId) : undefined,
+        slug: updatedSlug ? updatedSlug : undefined,
       })
-      .where(eq(venues.city_id, idToUpdate))
+      .where(eq(venues.venue_id, idToUpdate))
       .returning();
     
     return new Response(JSON.stringify(updatedVenue), { status: 201 });
