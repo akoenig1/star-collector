@@ -10,7 +10,6 @@
 
 {#if $message}<h3>{$message}</h3>{/if}
 
-
 <form method="post" use:enhance>
 	<label for="email">Email</label>
 	<input 
