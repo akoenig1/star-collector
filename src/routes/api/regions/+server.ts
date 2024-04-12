@@ -5,17 +5,16 @@ import { Region, NewRegion } from '$lib/db/types';
 
 
 // GET /api/regions
-// GET /api/regions/:id
+// GET /api/regions/:slug
 export async function GET({ url }) {
   try {
     const params = url.searchParams;
-    const idString = params.get('id') as string | null;
-    const id = idString ? parseInt(idString) : null;
+    const slug = params.get('slug') as string | null;
 
-    const result: Region[] = id
+    const result: Region[] = slug
       ? await db.select()
         .from(regions)
-        .where(eq(regions.region_id, id))
+        .where(eq(regions.slug, slug))
       : await db.select().from(regions);
 
     return new Response(JSON.stringify(result), { status: 200 });
@@ -39,18 +38,18 @@ export async function POST({ request }) {
   }
 }
 
-// PUT /api/regions/:id
+// PUT /api/regions/:slug
 export async function PUT({ request, url }) {
   try {
     const params = url.searchParams;
-    const idToUpdate = parseInt(params.get('id') as string);
+    const slugToUpdate = params.get('slug') as string;
 
     const data = await request.formData();
     const updatedRegionName = data.get('name') as string;
 
     const updatedRegion = await db.update(regions)
       .set({ name: updatedRegionName })
-      .where(eq(regions.region_id, idToUpdate))
+      .where(eq(regions.slug, slugToUpdate))
       .returning();
     
     return new Response(JSON.stringify(updatedRegion), { status: 201 });
@@ -59,15 +58,15 @@ export async function PUT({ request, url }) {
   }
 }
 
-// DELETE /api/regions/:id
+// DELETE /api/regions/:slug
 export async function DELETE({ url }) {
   try {
     const params = url.searchParams;
-    const idToDelete = parseInt(params.get('id') as string);
+    const slugToDelete = params.get('slug') as string;
 
-    console.log(`Deleting region with id: ${idToDelete}`);
+    console.log(`Deleting region with id: ${slugToDelete}`);
     const deletedRegionId = await db.delete(regions)
-      .where(eq(regions.region_id, idToDelete))
+      .where(eq(regions.slug, slugToDelete))
       .returning({deletedId: regions.region_id});
     
     return new Response(JSON.stringify(deletedRegionId), { status: 201 });
