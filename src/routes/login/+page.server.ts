@@ -11,17 +11,17 @@ import { User } from "$lib/db/types";
 export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
-		const username = formData.get("username");
+		const email = formData.get("email");
 		const password = formData.get("password");
 
 		if (
-			typeof username !== "string" ||
-			username.length < 3 ||
-			username.length > 31 ||
-			!/^[a-z0-9_-]+$/.test(username)
+			typeof email !== "string" ||
+			email.length < 3 ||
+			email.length > 320 ||
+			!/^[a-z0-9_-]+$/.test(email)
 		) {
 			return fail(400, {
-				message: "Invalid username"
+				message: "Invalid email"
 			});
 		}
 		if (typeof password !== "string" || password.length < 6 || password.length > 255) {
@@ -32,26 +32,26 @@ export const actions: Actions = {
 
 		const existingUser: User = (await db.select()
       .from(users)
-			.where(eq(users.username, username.toLowerCase())))[0];
+			.where(eq(users.email, email.toLowerCase())))[0];
 		if (!existingUser) {
 			// NOTE:
-			// Returning immediately allows malicious actors to figure out valid usernames from response times,
+			// Returning immediately allows malicious actors to figure out valid emails from response times,
 			// allowing them to only focus on guessing passwords in brute-force attacks.
-			// As a preventive measure, you may want to hash passwords even for invalid usernames.
-			// However, valid usernames can already be revealed with the signup page among other methods.
+			// As a preventive measure, you may want to hash passwords even for invalid emails.
+			// However, valid emails can already be revealed with the signup page among other methods.
 			// It will also be much more resource intensive.
 			// Since protecting against this is non-trivial,
 			// it is crucial your implementation is protected against brute-force attacks with login throttling etc.
-			// If usernames are public, you may outright tell the user that the username is invalid.
+			// If emails are public, you may outright tell the user that the email is invalid.
 			return fail(400, {
-				message: "Incorrect username or password"
+				message: "Incorrect email or password"
 			});
 		}
 
 		const validPassword = await new Argon2id().verify(existingUser.hashedPassword, password);
 		if (!validPassword) {
 			return fail(400, {
-				message: "Incorrect username or password"
+				message: "Incorrect email or password"
 			});
 		}
 
