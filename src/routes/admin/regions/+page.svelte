@@ -1,25 +1,16 @@
 <script lang="ts">
-	async function getRegions() {
-    const response = await fetch('/api/regions')
-    const regions = await response.json()
-    return regions;
-  }
+	export let data;
+  const { regions } = data;
 </script>
 
 <h1>Regions</h1>
 
-{#await getRegions()}
-  <p>Loading...</p>
-{:then regions}
-  <p>Showing {regions.length} regions.</p>
+<p>Showing {regions.length} regions.</p>
 
-  <ul>
-    {#each regions as region}
-      <li>
-        <a href="/admin/regions/{region.slug}">{region.name}</a>
-      </li>
-    {/each}
-  </ul>
-{:catch error}
-  <p>{error.message}</p>
-{/await}
+<ul>
+  {#each regions as region}
+    <li>
+      <a href="/admin/regions/{region.slug}">{region.name}</a>
+    </li>
+  {/each}
+</ul>

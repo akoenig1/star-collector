@@ -1,4 +1,4 @@
-<h1>Admin Dashboaard</h1>
+<h1>Admin Dashboard</h1>
 
 <ul>
   <a href="/admin/regions">Regions</a>
