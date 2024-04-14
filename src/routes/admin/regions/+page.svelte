@@ -4,7 +4,12 @@
   export let data;
   $: regions = data.regions;
 
-  const { form, errors, constraints, message, enhance } = superForm(data.form);
+  const { form, errors, constraints, message, enhance } = superForm(data.form, {
+    onError({ result }) {
+      console.log(result);
+      $message = result.error.message || "Unknown error";
+    }
+  });
 </script>
 
 <h1>Regions</h1>
@@ -17,7 +22,7 @@
       <a href="/admin/regions/{region.slug}">{region.name}</a>
     </li>
   {/each}
-  <form action="?/create" method="post">
+  <form action="?/create" method="post" use:enhance>
     <label for="regionName">Region Name</label>
     <input 
       name="regionName" 
@@ -39,5 +44,6 @@
     {#if $errors.slug}<span class="invalid">{$errors.slug}</span>{/if}
 
     <button type="submit">Add Region</button>
+    {#if $message}<p>{$message}</p>{/if}
   </form>
 </ul>

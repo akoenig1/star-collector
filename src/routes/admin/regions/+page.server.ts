@@ -42,9 +42,13 @@ export const actions: Actions = {
       slug: slug ?? regionName.toLowerCase().replace(/\s/g, '-'),
     }
 
-    await addRegion(region);
+    const result = await addRegion(region);
 
-    return { form }
+    if (result.success) {
+      return { form }
+    } else {
+      error(500, result.message)
+    }
   }
 };
 
@@ -54,5 +58,22 @@ const getRegions = async () => {
 }
 
 const addRegion = async (region: NewRegion) => {
-  await db.insert(regions).values(region);
+  try { 
+    console.log(`Adding region ${region.name}...`)
+    const res = await db.insert(regions).values(region).returning();
+    const newRegion = res[0];
+    console.log(`Region ${newRegion.name} added successfully!`)
+    return {
+      success: true,
+      message: `Region ${newRegion.name} added successfully!`,
+    }
+  } catch (error) {
+    console.error(error);
+    let detail = '';
+    if (error instanceof Error) detail = error.message;
+    return {
+      success: false,
+      message: `Error adding region ${region.name}: ${detail}`,
+    }
+  }
 }
