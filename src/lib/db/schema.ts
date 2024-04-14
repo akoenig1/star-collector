@@ -20,7 +20,7 @@ export const sessions = pgTable("session", {
 export const regions = pgTable("regions", {
   region_id: serial("region_id").primaryKey(),
   name: text("name"),
-  slug: text("slug"),
+  slug: text("slug").unique(),
 });
 
 export const cities = pgTable("cities", {
@@ -28,14 +28,14 @@ export const cities = pgTable("cities", {
   name: text("name"),
   region_id: integer("region_id").references(() => regions.region_id),
   current_year: integer("current_year"),
-  slug: text("slug"),
+  slug: text("slug").unique(),
 });
 
 export const venues = pgTable("venues", {
   venue_id: serial("venue_id").primaryKey(),
   name: text("name"),
   city_id: integer("city_id").references(() => cities.city_id),
-  slug: text("slug"),
+  slug: text("slug").unique(),
 });
 
 export const starAwards = pgTable("star_awards", {
