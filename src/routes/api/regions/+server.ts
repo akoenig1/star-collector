@@ -29,7 +29,7 @@ export async function POST({ request }) {
   try {
     const data = await request.formData();
     const name = data.get('name') as string;
-    const slug = name.toLowerCase().replace(/\s/g, '-');
+    const slug = data.get('slug') as string ?? name.toLowerCase().replace(/\s/g, '-');
     const region: NewRegion = { name, slug };
 
     const result = await db.insert(regions).values(region).returning();

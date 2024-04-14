@@ -24,7 +24,7 @@ export async function load() {
 
 const regionFormSchema = z.object({
   regionName: z.string(),
-  slug: z.string(),
+  slug: z.string().optional(),
 });
 
 export const actions: Actions = {
@@ -39,7 +39,7 @@ export const actions: Actions = {
 
     const region: NewRegion = {
       name: regionName,
-      slug: slug
+      slug: slug ?? regionName.toLowerCase().replace(/\s/g, '-'),
     }
 
     await addRegion(region);
