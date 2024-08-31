@@ -1,3 +1,16 @@
-<h1 class="text-xl">Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { enhance } from "$app/forms";
 
+  export let data;
+</script>
+
+<h1 class="text-xl">Welcome to Star Collector</h1>
+
+{#if data.user}
+  <p>Hello, {data.user.email}!</p>
+  <form method="post" use:enhance>
+    <button>Sign out</button>
+  </form>
+{:else}
+  <p><a href="/login">Log in</a> to get started</p>
+{/if}
