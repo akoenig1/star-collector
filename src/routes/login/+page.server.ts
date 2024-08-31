@@ -55,7 +55,9 @@ export const actions: Actions = {
 			...sessionCookie.attributes
 		});
 
-		redirect(302, "/");
+    existingUser.isAdmin
+      ? redirect(302, "/admin") 
+      : redirect(302, "/");
 	}
 };
 
