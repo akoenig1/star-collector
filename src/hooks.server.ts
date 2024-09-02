@@ -1,8 +1,18 @@
 import { lucia } from "$lib/server/auth";
 import type { Handle } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
+
+const protectedRoutes = ['/admin'];
+
+function isProtectedRoute(path: string) {
+  return protectedRoutes.some(allowedPath =>
+    path.startsWith(allowedPath)
+  );
+}
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
+  const url = new URL(event.request.url);
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.session = null;
@@ -26,6 +36,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			...sessionCookie.attributes
 		});
 	}
+
+  if (!user?.isAdmin && isProtectedRoute(url.pathname)) {
+    throw redirect(302, '/');
+  }
+
 	event.locals.user = user;
 	event.locals.session = session;
 	return resolve(event);
