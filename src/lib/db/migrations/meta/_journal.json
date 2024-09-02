@@ -43,6 +43,13 @@
       "when": 1725134526369,
       "tag": "0005_wealthy_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725294300342,
+      "tag": "0006_simple_wilson_fisk",
+      "breakpoints": true
     }
   ]
 }
