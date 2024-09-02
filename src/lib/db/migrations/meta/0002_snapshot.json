@@ -1,10 +1,8 @@
 {
-  "id": "6145fc9f-a6da-47ac-9c8f-15e398923dd0",
-  "prevId": "d41c9ca7-73f3-4051-892b-875a1a114165",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "cities": {
+    "public.cities": {
       "name": "cities",
       "schema": "",
       "columns": {
@@ -38,21 +36,21 @@
         "cities_region_id_regions_region_id_fk": {
           "name": "cities_region_id_regions_region_id_fk",
           "tableFrom": "cities",
-          "tableTo": "regions",
           "columnsFrom": [
             "region_id"
           ],
+          "tableTo": "regions",
           "columnsTo": [
             "region_id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "regions": {
+    "public.regions": {
       "name": "regions",
       "schema": "",
       "columns": {
@@ -74,7 +72,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "session": {
+    "public.session": {
       "name": "session",
       "schema": "",
       "columns": {
@@ -102,21 +100,21 @@
         "session_user_id_user_id_fk": {
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "star_awards": {
+    "public.star_awards": {
       "name": "star_awards",
       "schema": "",
       "columns": {
@@ -150,21 +148,21 @@
         "star_awards_venue_id_venues_venue_id_fk": {
           "name": "star_awards_venue_id_venues_venue_id_fk",
           "tableFrom": "star_awards",
-          "tableTo": "venues",
           "columnsFrom": [
             "venue_id"
           ],
+          "tableTo": "venues",
           "columnsTo": [
             "venue_id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -193,14 +191,14 @@
       "uniqueConstraints": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "venues": {
+    "public.venues": {
       "name": "venues",
       "schema": "",
       "columns": {
@@ -228,15 +226,15 @@
         "venues_city_id_cities_city_id_fk": {
           "name": "venues_city_id_cities_city_id_fk",
           "tableFrom": "venues",
-          "tableTo": "cities",
           "columnsFrom": [
             "city_id"
           ],
+          "tableTo": "cities",
           "columnsTo": [
             "city_id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -246,8 +244,11 @@
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "6145fc9f-a6da-47ac-9c8f-15e398923dd0",
+  "prevId": "d41c9ca7-73f3-4051-892b-875a1a114165",
+  "sequences": {}
 }

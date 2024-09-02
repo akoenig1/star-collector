@@ -9,8 +9,9 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"generate-migration": "drizzle-kit generate:pg --out src/lib/db/migrations --schema src/lib/db/schema.ts",
+		"generate-migration": "drizzle-kit generate --dialect=postgresql --out=src/lib/db/migrations --schema=src/lib/db/schema.ts",
 		"migrate": "tsx src/lib/db/migrate.ts",
+    "upgrade-migrations": "drizzle-kit up --dialect=postgresql --out=src/lib/db/migrations",
 		"drizzle-studio": "drizzle-kit studio",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
