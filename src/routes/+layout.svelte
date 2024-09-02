@@ -1,5 +1,6 @@
 <script>
   import "../app.css";
+  import "../tailwind.css";
 	import { enhance } from "$app/forms";
 
   export let data;
