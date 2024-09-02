@@ -22,6 +22,7 @@ export async function load({ locals }) {
 
 	if (regions) {
 		return { 
+      user,
       regions,
       cities,
       venues,
