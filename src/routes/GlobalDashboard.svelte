@@ -48,6 +48,6 @@
 </div>
 
 <div class="my-4">
-  <h3>Visits</h3>
+  <a href="/visits">Visits</a>
   <p>{userVisits}</p>
 </div>
