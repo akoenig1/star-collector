@@ -32,9 +32,7 @@ export const actions: Actions = {
       return fail(400, { form });
     }
 
-    console.log(form.data)
     const { cityName, regionId, slug: citySlug, currentYear } = form.data;
-    console.log(regionId);
 
     const newCity: NewCity = {
       name: cityName,
