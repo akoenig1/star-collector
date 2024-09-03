@@ -50,6 +50,13 @@
       "when": 1725294300342,
       "tag": "0006_simple_wilson_fisk",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1725367847687,
+      "tag": "0007_chilly_newton_destine",
+      "breakpoints": true
     }
   ]
 }

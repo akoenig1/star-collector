@@ -49,6 +49,7 @@ export const starAwards = pgTable("star_awards", {
 export const visits = pgTable("visits", {
   visit_id: serial("visit_id").primaryKey(),
   user_id: text("user_id").references(() => users.id),
+  venue_id: integer("venue_id").references(() => venues.venue_id),
   star_award_id: integer("star_award_id").references(() => starAwards.star_award_id),
   visit_date: timestamp("visit_date", {
     withTimezone: true,
