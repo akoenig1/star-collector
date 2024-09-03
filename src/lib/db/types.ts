@@ -4,6 +4,7 @@ import {
   regions,
   starAwards,
   venues,
+  visits,
 } from "./schema";
 
 // users
@@ -25,3 +26,7 @@ export type NewVenue = typeof venues.$inferInsert;
 // starAwards
 export type StarAward = typeof starAwards.$inferSelect;
 export type NewStarAward = typeof starAwards.$inferInsert;
+
+// visits
+export type Visit = typeof visits.$inferSelect;
+export type NewVisit = typeof visits.$inferInsert;
