@@ -1,9 +1,13 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
+  import Svelecte from 'svelecte';
 
   export let data;
   $: cities = data.cities;
   $: regions = data.regions;
+
+  const regionOptions = data.regions.map(region => ({ value: region.region_id, text: region.name }));
 
   const { form, errors, constraints, message, enhance } = superForm(data.form, {
     onError({ result }) {
@@ -56,17 +60,13 @@
   {#if $errors.slug}<span class="invalid">{$errors.slug}</span>{/if}
 
   <label for="regionId">Region</label>
-  <select 
-    name="regionId" 
-    id="region-id" 
-    aria-invalid={$errors.regionId ? 'true' : undefined}
-    bind:value={$form.regionId} 
-    {...$constraints.regionId}
-  >
-    {#each regions as region (region.region_id)}
-      <option value={region.region_id}>{region.name}</option>
-    {/each}
-  </select>
+  <Svelecte 
+    options={regionOptions}
+    name="regionId"
+    inputId="region-id"
+    bind:value={$form.regionId}
+    placeholder="Select region"
+  ></Svelecte>
   {#if $errors.regionId}<span class="invalid">{$errors.regionId}</span>{/if}
 
   <label for="currentYear">Current Year</label>
