@@ -8,43 +8,50 @@
   $: totalTwoStarVenues = data.totalTwoStarVenues;
   $: totalOneStarVenues = data.totalOneStarVenues;
   $: userVisits = data.userVisits;
+  $: userStars = data.userStars;
+  $: userVenueCount = data.userVenueCount;
+  $: userOneStarVenues = data.userOneStarVenues;
+  $: userTwoStarVenues = data.userTwoStarVenues;
+  $: userThreeStarVenues = data.userThreeStarVenues;
+  $: userRegionCount = data.userRegionCount;
+  $: userCityCount = data.userCityCount;
 </script>
 
 <h1 class="text-xl">Welcome to Star Collector</h1>
 
 <div class="my-4">
   <h3>Stars</h3>
-  <p>0 | {totalGlobalStars}</p>
+  <p>{userStars} | {totalGlobalStars}</p>
 </div>
 
 <div class="my-4">
   <h3>Regions</h3>
-  <p>0 | {regions.length}</p>
+  <p>{userRegionCount} | {regions.length}</p>
 </div>
 
 <div class="my-4">
   <h3>Cities</h3>
-  <p>0 | {cities.length}</p>
+  <p>{userCityCount} | {cities.length}</p>
 </div>
 
 <div class="my-4">
   <h3>Venues</h3>
-  <p>0 | {venues.length}</p>
+  <p>{userVenueCount} | {venues.length}</p>
 </div>
 
 <div class="my-4">
   <h3>Three Star Restaurants</h3>
-  <p>0 | {totalThreeStarVenues}</p>
+  <p>{userThreeStarVenues} | {totalThreeStarVenues}</p>
 </div>
 
 <div class="my-4">
   <h3>Two Star Restaurants</h3>
-  <p>0 | {totalTwoStarVenues}</p>
+  <p>{userTwoStarVenues} | {totalTwoStarVenues}</p>
 </div>
 
 <div class="my-4">
   <h3>One Star Restaurants</h3>
-  <p>0 | {totalOneStarVenues}</p>
+  <p>{userOneStarVenues} | {totalOneStarVenues}</p>
 </div>
 
 <div class="my-4">

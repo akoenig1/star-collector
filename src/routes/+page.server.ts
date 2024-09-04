@@ -15,6 +15,24 @@ export async function load({ locals }) {
   const currentGlobalStarAwards = await getCurrentGlobalStarAwards();
   const userVisits = user ? await getUserVisits(user) : [];
 
+  // FIX: for repeat visits, we should only count the stars once, but which visit to use?
+  const userStars = userVisits.reduce((acc, visit) => {
+    const addend = visit.star_awards?.stars ?? 0;
+    return acc + addend;
+  }, 0);
+
+  const uniqueVenueIds = new Set(userVisits.map(visit => visit.visits.venue_id));
+  const userVenueCount = uniqueVenueIds.size;
+  const userOneStarVenues = userVisits.filter(visit => uniqueVenueIds.has(visit.visits.venue_id) && visit.star_awards?.stars === 1).length;
+  const userTwoStarVenues = userVisits.filter(visit => uniqueVenueIds.has(visit.visits.venue_id) && visit.star_awards?.stars === 2).length;
+  const userThreeStarVenues = userVisits.filter(visit => uniqueVenueIds.has(visit.visits.venue_id) && visit.star_awards?.stars === 3).length;
+
+  const uniqueRegionIds = new Set(userVisits.map(visit => visit.cities.region_id));
+  const userRegionCount = uniqueRegionIds.size;
+
+  const uniqueCityIds = new Set(userVisits.map(visit => visit.venues.city_id));
+  const userCityCount = uniqueCityIds.size;
+
   const totalGlobalStars = currentGlobalStarAwards.reduce((acc, award) => acc + (award?.stars ?? 0), 0);
   const totalThreeStarVenues = currentGlobalStarAwards.filter(award => award.stars === 3).length;
   const totalTwoStarVenues = currentGlobalStarAwards.filter(award => award.stars === 2).length;
@@ -31,6 +49,13 @@ export async function load({ locals }) {
       totalTwoStarVenues,
       totalOneStarVenues,
       userVisits,
+      userStars,
+      userVenueCount,
+      userOneStarVenues,
+      userTwoStarVenues,
+      userThreeStarVenues,
+      userRegionCount,
+      userCityCount,
     };
 	}
 
@@ -56,6 +81,7 @@ const getUserVisits = async (user) => {
   const result = await db.select().from(visits)
     .innerJoin(venues, eq(visits.venue_id, venues.venue_id))
     .innerJoin(starAwards, eq(visits.star_award_id, starAwards.star_award_id))
+    .innerJoin(cities, eq(venues.city_id, cities.city_id))
     .where(eq(visits.user_id, user.id));
 
   return result;
