@@ -6,7 +6,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from '$lib/db/db';
 import { NewVisit, Venue } from "$lib/db/types";
-import { starAwards, visits, venues } from '$lib/db/schema';
+import { cities, starAwards, visits, venues } from '$lib/db/schema';
 import { Actions } from "./$types";
 
 export async function load() {
@@ -40,8 +40,15 @@ export const actions: Actions = {
     const { venueId, year, month, day } = form.data;
 
     const visitDate = new Date(year, month, day ?? 1);
+    const cityYear = await getCityYear(venueId);
 
-    const starAwardId = await getStarAwardId(venueId, year);
+    if (!cityYear) {
+      error(404, 'Error retrieving current year for city.');
+    }
+
+    const starAwardYear = year > cityYear ? cityYear : year;
+
+    const starAwardId = await getStarAwardId(venueId, starAwardYear);
 
     const newVisit: NewVisit = {
       user_id: user.id,
@@ -72,11 +79,20 @@ const getVenues = async () => {
   return result;
 }
 
+const getCityYear = async (venueId: number) => {
+  const venueResult = await db.select().from(venues).where(eq(venues.venue_id, venueId));
+  const cityId = venueResult[0]?.city_id;
+  if (!cityId) return null;
+
+  const cityResult = await db.select().from(cities).where(eq(cities.city_id, cityId));
+
+  return cityResult[0]?.current_year;
+}
+
 const getStarAwardId = async (venueId: number, year: number) => {
   const result = await db.select().from(starAwards).where(
     and(
       eq(starAwards.venue_id, venueId),
-      // need to think out the logic here to understand how to match a visit year to a star award
       eq(starAwards.year, year),
     )
   );
