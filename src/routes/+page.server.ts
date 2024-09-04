@@ -53,7 +53,11 @@ const getVenues = async () => {
 }
 
 const getUserVisits = async (user) => {
-  const result = await db.select().from(visits).where(eq(visits.user_id, user.id));
+  const result = await db.select().from(visits)
+    .innerJoin(venues, eq(visits.venue_id, venues.venue_id))
+    .innerJoin(starAwards, eq(visits.star_award_id, starAwards.star_award_id))
+    .where(eq(visits.user_id, user.id));
+
   return result;
 }
 

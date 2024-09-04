@@ -49,5 +49,11 @@
 
 <div class="my-4">
   <a href="/visits">Visits</a>
-  <p>{userVisits}</p>
+  {#each userVisits as visit}
+    <span class="block my-1">
+      <p class="inline-block">{visit.venues.name}</p>
+      <p class="inline-block">{visit.star_awards.stars}</p>
+      <p class="inline-block">{visit.visits.visit_date.toLocaleDateString('en-US')}</p>
+    </span>
+  {/each}
 </div>
