@@ -37,6 +37,7 @@
   <div class="my-4">
     <h3>Two Star Restaurants</h3>
     <p>{userTwoStarVenues} | {totalTwoStarVenues}</p>
+    <ProgressCircle value={userTwoStarVenues} maxValue={totalTwoStarVenues} />
   </div>
   
   <div class="my-4">
